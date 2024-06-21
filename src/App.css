@@ -1,0 +1,48 @@
+body {
+  font-family: 'Press Start 2P', cursive;
+  margin: 0;
+  padding: 0;
+  background-color: #1b1b32;
+  color: #f5f5f5;
+}
+
+.App-header {
+  background-color: #0b0b19;
+  padding: 20px;
+  color: #00ff7f;
+  text-align: center;
+}
+
+.App-header nav a {
+  color: #00ff7f;
+  margin: 0 15px;
+  text-decoration: none;
+}
+
+.App-header nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 20px;
+}
+
+footer {
+  background-color: #0b0b19;
+  color: #00ff7f;
+  text-align: center;
+  padding: 20px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+footer nav a {
+  color: #00ff7f;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+footer nav a:hover {
+  text-decoration: underline;
+}

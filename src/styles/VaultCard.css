@@ -1,0 +1,28 @@
+.vault-card {
+    background-color: #2b2b4f;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    width: 300px;
+    text-align: center;
+    color: #f5f5f5;
+  }
+  
+  .vault-card h2 {
+    margin-top: 0;
+    color: #00ff7f;
+  }
+  
+  .vault-card button {
+    background-color: #00ff7f;
+    color: #1b1b32;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+  }
+  
+  .vault-card button:hover {
+    background-color: #00e673;
+  }
