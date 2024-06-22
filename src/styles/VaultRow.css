@@ -1,0 +1,19 @@
+.vault-row-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .vault-info {
+    flex: 1;
+  }
+  
+  .vault-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: right;
+  }
+  
+  .vault-details span {
+    color: #00ff7f;
+  }

@@ -1,6 +1,23 @@
 .vault-types-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.vault-type-card-container {
+  flex: 1 1 30%; /* Ensure each card takes up approximately one-third of the row */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  transition: transform 0.2s, border 0.2s;
+  user-select: none;
+}
+
+.vault-type-card-container.selected .vault-type-card {
+  border: 2px solid #00ff7f;
+  transform: scale(1.05);
+}
+
+.vault-type-card-container:hover .vault-type-card {
+  border: 2px solid #00e673;
+  transform: scale(1.05);
+}
