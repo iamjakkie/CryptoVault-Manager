@@ -1,4 +1,4 @@
-.vault-card {
+.vault-type-card {
     background-color: #2b2b4f;
     padding: 20px;
     border-radius: 8px;
@@ -8,17 +8,17 @@
     color: #f5f5f5;
   }
   
-  .vault-card h2 {
+  .vault-type-card h2 {
     margin-top: 0;
     color: #00ff7f;
     font-size: medium;
   }
 
-  .vault-card p {
+  .vault-type-card p {
     font-size: small;
   }
   
-  .vault-card button {
+  .vault-type-card button {
     background-color: #00ff7f;
     color: #1b1b32;
     border: none;
@@ -28,6 +28,6 @@
     font-family: 'Press Start 2P', cursive;
   }
   
-  .vault-card button:hover {
+  .vault-type-card button:hover {
     background-color: #00e673;
   }

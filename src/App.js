@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import VaultsList from './components/VaultsList';
+import VaultTypesList from './components/VaultTypesList';
 import Portfolio from './components/Portfolio';
 import Docs from './components/Docs';
 import './App.css';
 
 function App() {
-  const vaults = [
+  const vaultTypes = [
     {
       title: 'Dual Currency',
       description: 'Maximise yield on your alternative assets while seizing the opportunity to acquire at a discount or sell for a profit.',
@@ -36,7 +36,7 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route exact path='/' element={<VaultsList vaults={vaults}/>}/>
+          <Route exact path='/' element={<VaultTypesList vaultTypes={vaultTypes}/>}/>
           <Route path="/portfolio" element={<Portfolio />}/>
           <Route path="/docs" element={<Docs />}/>
         </Routes>
