@@ -1,0 +1,23 @@
+.docs {
+    padding: 20px;
+    text-align: center;
+    color: #f5f5f5;
+  }
+  
+  .docs ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .docs li {
+    margin: 10px 0;
+  }
+  
+  .docs a {
+    color: #00ff7f;
+    text-decoration: none;
+  }
+  
+  .docs a:hover {
+    text-decoration: underline;
+  }

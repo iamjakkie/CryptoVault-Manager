@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import VaultsList from './components/VaultsList';
 import Portfolio from './components/Portfolio';
+import Docs from './components/Docs';
 import './App.css';
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
         <nav>
           <button><Link to="/">Home</Link></button>
           <button><Link to="/portfolio">Portfolio</Link></button>
-          <button><a href="#">Docs</a></button>
+          <button><Link to="/docs">Docs</Link></button>
           <button><a href="#">Connect Wallet</a></button>
         </nav>
       </header>
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           <Route exact path='/' element={<VaultsList vaults={vaults}/>}/>
           <Route path="/portfolio" element={<Portfolio />}/>
+          <Route path="/docs" element={<Docs />}/>
         </Routes>
       </main>
       <footer>
