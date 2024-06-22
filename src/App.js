@@ -1,5 +1,7 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import VaultsList from './components/VaultsList';
+import Portfolio from './components/Portfolio';
 import './App.css';
 
 function App() {
@@ -20,18 +22,22 @@ function App() {
   ];
 
   return (
+    <Router>
     <div className="App">
       <header className="App-header">
         <h1>Crypto Vaults</h1>
         <nav>
-          <button><a href="#">Home</a></button>
-          <button><a href="#">Portfolio</a></button>
+          <button><Link to="/">Home</Link></button>
+          <button><Link to="/portfolio">Portfolio</Link></button>
           <button><a href="#">Docs</a></button>
           <button><a href="#">Connect Wallet</a></button>
         </nav>
       </header>
       <main>
-        <VaultsList vaults={vaults} />
+        <Routes>
+          <Route exact path='/' element={<VaultsList vaults={vaults}/>}/>
+          <Route path="/portfolio" element={<Portfolio />}/>
+        </Routes>
       </main>
       <footer>
         <p>&copy; 2024 CryptoVault Manager</p>
@@ -42,6 +48,7 @@ function App() {
         </nav>
       </footer>
     </div>
+    </Router>
   );
 }
 
