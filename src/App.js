@@ -69,9 +69,19 @@ function App() {
   ];
 
   const [filteredVaults, setFilteredVaults] = useState(vaultTypes.flatMap(type => type.vaults));
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleFilterChange = (filteredVaults) => {
     setFilteredVaults(filteredVaults);
+  };
+
+  const handleModalStateChange = (isOpen) => {
+    setModalOpen(isOpen);
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
   };
 
   return (
@@ -90,8 +100,10 @@ function App() {
           <Routes>
             <Route exact path='/' element={
               <>
-                <VaultTypesList vaultTypes={vaultTypes} onFilterChange={handleFilterChange}/>
-                <VaultList vaults={filteredVaults}/>
+                <div className={`main-content ${modalOpen ? 'blur' : ''}`}>
+                  <VaultTypesList vaultTypes={vaultTypes} onFilterChange={handleFilterChange}/>
+                  <VaultList vaults={filteredVaults} onModalStateChange={handleModalStateChange}/>
+                </div>
               </>
             }/>
             <Route path="/portfolio" element={<Portfolio />}/>
