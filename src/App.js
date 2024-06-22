@@ -22,12 +22,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Investment Strategies</h1>
+        <h1>Crypto Vaults</h1>
         <nav>
-          <a href="#">Home</a>
-          <a href="#">Portfolio</a>
-          <a href="#">Docs</a>
-          <a href="#">Connect Wallet</a>
+          <button><a href="#">Home</a></button>
+          <button><a href="#">Portfolio</a></button>
+          <button><a href="#">Docs</a></button>
+          <button><a href="#">Connect Wallet</a></button>
         </nav>
       </header>
       <main>

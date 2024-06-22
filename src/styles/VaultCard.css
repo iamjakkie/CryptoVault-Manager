@@ -11,6 +11,11 @@
   .vault-card h2 {
     margin-top: 0;
     color: #00ff7f;
+    font-size: medium;
+  }
+
+  .vault-card p {
+    font-size: small;
   }
   
   .vault-card button {
