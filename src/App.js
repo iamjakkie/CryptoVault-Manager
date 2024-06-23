@@ -4,6 +4,7 @@ import VaultTypesList from './components/VaultTypesList';
 import VaultList from './components/VaultList';
 import Portfolio from './components/Portfolio';
 import Docs from './components/Docs';
+import BacktestingEngine from './components/BacktestingEngine';
 import './App.css';
 
 function App() {
@@ -92,6 +93,7 @@ function App() {
           <nav>
             <button><Link to="/">Home</Link></button>
             <button><Link to="/portfolio">Portfolio</Link></button>
+            <button><Link to="/backtesting">Backtesting Engine</Link></button>
             <button><Link to="/docs">Docs</Link></button>
             <button><a href="#">Connect Wallet</a></button>
           </nav>
@@ -107,6 +109,7 @@ function App() {
               </>
             }/>
             <Route path="/portfolio" element={<Portfolio />}/>
+            <Route path="/backtesting" element={<BacktestingEngine vaultTypes={vaultTypes} />}/>
             <Route path="/docs" element={<Docs />}/>
           </Routes>
         </main>

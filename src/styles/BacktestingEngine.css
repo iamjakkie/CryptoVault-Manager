@@ -1,0 +1,48 @@
+.backtesting-engine {
+    padding: 20px;
+    background-color: #1b1b32;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: #f5f5f5;
+  }
+  
+  .backtesting-engine .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .backtesting-engine label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .backtesting-engine input,
+  .backtesting-engine select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #00ff7f;
+    background-color: #2b2b4f;
+    color: #f5f5f5;
+  }
+  
+  .backtesting-engine button {
+    background-color: #00ff7f;
+    color: #1b1b32;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .backtesting-engine button:hover {
+    background-color: #00e673;
+  }
+  
+  .backtesting-engine .report {
+    margin-top: 20px;
+    background-color: #2b2b4f;
+    padding: 20px;
+    border-radius: 8px;
+  }
