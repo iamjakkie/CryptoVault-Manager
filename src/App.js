@@ -10,60 +10,38 @@ import './App.css';
 function App() {
   const vaultTypes = [
     {
-      title: 'Dual Currency',
-      description: 'Maximise yield on your alternative assets while seizing the opportunity to acquire at a discount or sell for a profit.',
+      title: 'Dual Static Ratio',
+      description: 'Earn high yields with a fixed ratio of assets, providing a stable return.',
       vaults: [
         {
-          title: 'Gold Rush',
-          description: 'Invest in XAUT and ETH for up to 30.65% APY.',
+          title: 'ETH/PEPE 70:30',
+          description: 'Invest in ETH and PEPE for up to 20.75% APY.',
           yield: 'up to 30.65% APY',
-          depositAssets: ['XAUT', 'ETH'],
-          underlyingAssets: ['XAUT', 'ETH'],
+          depositAssets: ['ETH'],
+          underlyingAssets: ['ETH', 'PEPE'],
           productTVL: '$1,486,903.08 USD'
         },
         {
-          title: 'Silver Sprint',
-          description: 'Invest in XAGT and ETH for up to 20.75% APY.',
+          title: 'WBTC/WETH 40:60',
+          description: 'Invest in WBTC and WETH for up to 20.75% APY.',
           yield: 'up to 20.75% APY',
-          depositAssets: ['XAGT', 'ETH'],
-          underlyingAssets: ['XAGT', 'ETH'],
+          depositAssets: ['ETH'],
+          underlyingAssets: ['BTC', 'WETH'],
           productTVL: '$986,903.08 USD'
         }
       ]
     },
     {
-      title: 'Fixed Coupon Notes (Pure Options)',
-      description: 'Higher yields, securing returns solely from options premiums with strong downside protection.',
+      title: 'Dynamic Rebalancing Ratio',
+      description: 'Earn high yields with a dynamic ratio of assets, providing a variable return.',
       vaults: [
         {
-          title: 'stETH Whale',
-          description: 'Invest in wstETH for 12.69% APY.',
-          yield: '12.69% APY',
-          depositAssets: ['wstETH'],
-          underlyingAssets: ['wstETH'],
-          productTVL: '$17,885.85 USD'
-        },
-        {
-          title: 'ETH Whale',
-          description: 'Invest in ETH for 13.76% APY.',
-          yield: '13.76% APY',
+          title: 'Dynamic ETH/PEPE 50:50',
+          description: 'Invest in ETH and PEPE for up to 25.75% APY.',
+          yield: 'up to 25.75% APY',
           depositAssets: ['ETH'],
-          underlyingAssets: ['ETH'],
-          productTVL: '$428,484.35 USD'
-        }
-      ]
-    },
-    {
-      title: 'Fixed Coupon Notes (Bond + Options)',
-      description: 'Earn enhanced yields, blending stability and performance for the conservative investor.',
-      vaults: [
-        {
-          title: 'Cruise Control',
-          description: 'Invest in BTC and ETH for up to 18.40% APY.',
-          yield: 'up to 18.40% APY',
-          depositAssets: ['BTC', 'ETH'],
-          underlyingAssets: ['BTC', 'ETH'],
-          productTVL: '$10,877,849.20 USD'
+          underlyingAssets: ['ETH', 'PEPE'],
+          productTVL: '$17,885.85 USD'
         }
       ]
     }
