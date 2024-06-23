@@ -6,7 +6,7 @@ function VaultRow({ vault }) {
     <div className="vault-row">
       <div className="vault-row-content">
         <div className="vault-info">
-          <h3>{vault.title}</h3>
+          <h3 className="vault-title">{vault.title}</h3>
           <p>{vault.description}</p>
         </div>
         <div className="vault-details">

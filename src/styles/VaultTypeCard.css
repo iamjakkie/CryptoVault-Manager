@@ -13,17 +13,21 @@
     text-align: center;
     transition: background-color 0.2s;
     height: 100%; /* Ensure the card takes up the full height of its container */
+    font-size: 0.6em;
   }
   
-  .vault-type-card h2 {
-    margin-top: 0;
+  .vault-type-title {
+    padding-top: 10px;
     color: #00ff7f;
-    font-size: medium;
-  }
-
-  .vault-type-card p {
     font-size: small;
   }
+
+/* 
+  .vault-type-card p {
+    font-size: small;
+  } */
+
+  /* TODO: delete the increasing behavior when selected */
   
   .vault-type-card button {
     background-color: #00ff7f;
