@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@uniswap/periphery/contracts/UniswapV2Router02.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 
 contract Vault is Ownable{
     address private constant UNISWAP_V2_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
@@ -48,7 +49,7 @@ contract Vault is Ownable{
         require(ethAmount > 0, "Deposit must be greater than 0 ETH");
         uint256 _shares = ethAmount; // compressor algorithm
         // routing finds the best path to swap ETH for PEPE
-
+        swapETHforPEPE(ethAmount*pepeRatio);
 
         totalShares = totalShares+=_shares;
         shares[msg.sender] += _shares;
@@ -58,7 +59,20 @@ contract Vault is Ownable{
     function swapETHforPEPE(uint256 _ETHToSwap) internal returns (uint256) {
         uint256 ETHToSwapAmount = _ETHToSwap;
         // to add aggregator for trading
-        UniswapV2Router02.swapETHForExactTokens(amountOut, path, to, deadline);
+        IUniswapV2Router02 router = IUniswapV2Router02(UNISWAP_V2_ROUTER);
+
+        address[] memory path = new address[](2);
+        path[0] = WETH;
+        path[1] = PEPE;
+
+        try router.getAmountsOut(ETHToSwapAmount, path) returns (uint[] memory amounts) {
+            amountOut = amounts[amounts.length - 1];
+        } catch {
+            return 0;
+        }
+
+        router.swapETHForExactTokens(amountOut, path, msg.sender, block.timestamp);
+
         return ETHToSwapAmount;
     }
 
