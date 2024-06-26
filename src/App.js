@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Loader from './components/Loader';
 import VaultTypesList from './components/VaultTypesList';
 import VaultList from './components/VaultList';
 import Portfolio from './components/Portfolio';
@@ -49,6 +50,13 @@ function App() {
 
   const [filteredVaults, setFilteredVaults] = useState(vaultTypes.flatMap(type => type.vaults));
   const [modalOpen, setModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
 
   const handleFilterChange = (filteredVaults) => {
     setFilteredVaults(filteredVaults);
@@ -62,7 +70,9 @@ function App() {
       document.body.classList.remove('modal-open');
     }
   };
-
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <Router>
       <div className="App">
@@ -73,7 +83,7 @@ function App() {
             <button><Link to="/portfolio">Portfolio</Link></button>
             <button><Link to="/backtesting">Backtesting Engine</Link></button>
             <button><Link to="/docs">Docs</Link></button>
-            <button><a href="#">Connect Wallet</a></button>
+            {/* <button><a href="#">Connect Wallet</a></button> */}
           </nav>
         </header>
         <main>

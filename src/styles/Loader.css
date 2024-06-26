@@ -1,0 +1,27 @@
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #1b1b32;
+    z-index: 9999;
+    font-family: 'Press Start 2P', cursive;
+    color: #00ff7f;
+  }
+  
+  .loader-bar {
+    height: 20px;
+    width: 0;
+    background-color: #00ff7f;
+    transition: width 0.1s;
+  }
+  
+  .loader-text {
+    margin-top: 10px;
+    color: #00ff7f;
+  }
