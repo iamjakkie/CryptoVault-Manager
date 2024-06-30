@@ -8,8 +8,8 @@ import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 
 contract Vault is Ownable{
     address private constant UNISWAP_V2_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
-    address private constant WETH = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
-    address private constant PEPE = 0x6982508145454ce325ddbe47a25d4ec3d2311933;
+    address private constant WETHAdd = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address private constant PEPEAdd = 0x6982508145454Ce325dDbE47a25d4ec3d2311933;
     using SafeERC20 for IERC20;
 
     IERC20 public PEPE;
@@ -62,9 +62,10 @@ contract Vault is Ownable{
         IUniswapV2Router02 router = IUniswapV2Router02(UNISWAP_V2_ROUTER);
 
         address[] memory path = new address[](2);
-        path[0] = WETH;
-        path[1] = PEPE;
+        path[0] = WETHAdd;
+        path[1] = PEPEAdd;
 
+        uint256 amountOut;
         try router.getAmountsOut(ETHToSwapAmount, path) returns (uint[] memory amounts) {
             amountOut = amounts[amounts.length - 1];
         } catch {
