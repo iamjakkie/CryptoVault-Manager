@@ -25,10 +25,11 @@ contract Vault is Ownable{
     event Withdraw(address indexed user, uint256 value);
     event RewardsDistributed(uint256 totalRewards);
 
-    constructor(address _pepe, uint256 _ethRatio, uint256 _pepeRatio) Ownable(msg.sender) {
-        PEPE = IERC20(_pepe);
+    constructor(uint256 _ethRatio, uint256 _pepeRatio) Ownable(msg.sender) {
+        PEPE = IERC20(PEPEAdd);
         ethRatio = _ethRatio;
         pepeRatio = _pepeRatio;
+        require(ethRatio + pepeRatio == 100, "Ratios must add up to 1");
     }
 
     modifier onlyWhitelisted() {
