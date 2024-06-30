@@ -23,4 +23,6 @@
   
   .vault-details span {
     color: #00ff7f;
+    letter-spacing: 0;
+    word-spacing: 0;
   }
