@@ -25,6 +25,7 @@ describe('Vault', () => {
         it('Ratios have been successfully set', async () => {
             expect(await vault.ethRatio()).to.equal(60);
             expect(await vault.pepeRatio()).to.equal(40);
+            
         });
     });
 });
