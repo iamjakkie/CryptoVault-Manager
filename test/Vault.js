@@ -7,7 +7,7 @@ const { ethers } = require('hardhat');
     - PEPE contract has been successfully set
 */
 describe('Vault', () => {
-    beforeEach(async () => {
+    before(async () => {
         const current_block = await ethers.provider.getBlockNumber();
         console.log(`Current block: ${current_block}`);
     });
@@ -28,7 +28,9 @@ describe('Vault', () => {
             
         });
         it('PEPE contract can be used', async () => {
-            expect(await vault.PEPE().totalSupply()).to.not.equal(0);
+            const supply = await vault.PEPESupply();
+            console.log(supply);
+            expect(await vault.PEPESupply(), 'PEPE contract has been set').to.not.equal(0);
         });
     });
 });

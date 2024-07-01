@@ -105,4 +105,8 @@ contract Vault is Ownable{
         // distribute rewards to all users
         emit RewardsDistributed(_totalRewards);
     }
+
+    function PEPESupply() external view returns (uint256){
+        return PEPE.totalSupply();
+    }
 }
