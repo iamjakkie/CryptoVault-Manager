@@ -27,5 +27,8 @@ describe('Vault', () => {
             expect(await vault.pepeRatio()).to.equal(40);
             
         });
+        it('PEPE contract can be used', async () => {
+            expect(await vault.PEPE().totalSupply()).to.not.equal(0);
+        });
     });
 });
