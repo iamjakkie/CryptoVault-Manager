@@ -33,4 +33,20 @@ describe('Vault', () => {
             expect(await vault.PEPESupply(), 'PEPE contract has been set').to.not.equal(0);
         });
     });
+
+    describe('Success Swap', () => {
+        let vault, deployer, investor1, investor2;
+
+        beforeEach(async () => {
+            const Vault = await ethers.getContractFactory('Vault');
+            vault = await Vault.deploy(60, 40);
+
+            [deployer, investor1, investor2, _] = await ethers.getSigners();
+            console.log(investor1.address);
+        });
+
+        it('Init', async () => {
+
+        });
+    });
 });
