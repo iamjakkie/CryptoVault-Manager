@@ -3,7 +3,7 @@ const { ethers } = require('hardhat');
 /* tests:
     - Vault contract has been deployed successfully
     - Ratios have been successfully set
-    - PEPE contract can be used (successfully forked mainnet)
+    - PEPE contract is already deployed (successfully forked mainnet)
     - PEPE contract has been successfully set
 */
 describe('Vault', () => {
@@ -47,6 +47,16 @@ describe('Vault', () => {
 
         it('Init', async () => {
 
+        });
+
+        it('PEPE contract can be used', async () => {
+            const pepe = await vault.PEPE();
+            console.log(pepe);
+            expect(pepe).to.not.equal(0);
+            // TODO:
+            // check pepe supply
+            // check pepe symbol
+            // check pepe name
         });
     });
 });
