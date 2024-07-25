@@ -4,12 +4,16 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
+
+interface IWETH {
+    function deposit() external payable;
+}
 
 contract Vault is Ownable{
-    address private constant LIFI = 0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE;
     address private constant WETHAdd = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
     address private constant PEPEAdd = 0x6982508145454Ce325dDbE47a25d4ec3d2311933;
+    ISwapRouter private constant ROUTER = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
     using SafeERC20 for IERC20;
 
     IERC20 public PEPE;
@@ -19,7 +23,6 @@ contract Vault is Ownable{
     uint256 public totalShares;
     mapping(address => uint256) public shares;
     mapping(address => bool) public whitelist;
-
     
     event Deposit(address indexed user, uint256 value);
     event Withdraw(address indexed user, uint256 value);
@@ -45,37 +48,50 @@ contract Vault is Ownable{
         whitelist[_user] = false;
     }
 
+    function swapExactInputSingleHop(
+        address tokenIn,
+        address tokenOut,
+        uint24 poolFee,
+        uint256 amountIn,
+        address recipient
+    )
+        public
+        returns (uint256 amountOut)
+    {
+        // IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
+        IERC20(tokenIn).approve(address(ROUTER), amountIn);
+
+        ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
+            tokenIn: tokenIn,
+            tokenOut: tokenOut,
+            fee: poolFee,
+            recipient: recipient,
+            deadline: block.timestamp,
+            amountIn: amountIn,
+            amountOutMinimum: 0,
+            sqrtPriceLimitX96: 0
+        });
+
+        amountOut = ROUTER.exactInputSingle(params);
+    }
+
     function deposit() external payable {
         uint256 ethAmount = msg.value;
         require(ethAmount > 0, "Deposit must be greater than 0 ETH");
         uint256 _shares = ethAmount; // compressor algorithm
-        // routing finds the best path to swap ETH for PEPE
-        // swapETHforPEPE(ethAmount*pepeRatio);
+        
+        // wrap ETH to WETH
+        uint256 WETHAmount = pepeRatio * ethAmount / 100;
+        IWETH(WETHAdd).deposit{value: WETHAmount}();
+        uint256 PEPEAmount = swapExactInputSingleHop(WETHAdd, PEPEAdd, 3000, WETHAmount, address(this));
 
         totalShares = totalShares+=_shares;
         shares[msg.sender] += _shares;
-        emit Deposit(msg.sender, ethAmount);
-    }
 
-    function swapETHforPEPE(address target, uint256 value, bytes memory data) public {
-        // todo: send transactionRequest to LIFI
-        (bool success, bytes memory result) = LIFI.call{value: value}(data);
-        require(success, string(abi.encodePacked("ETH to PEPE swap failed: ", _getRevertMsg(result))));
-    }
 
-    function _getRevertMsg(bytes memory _returnData) private pure returns (string memory) {
-        if (_returnData.length < 68) return 'Transaction reverted silently';
-        assembly {
-            _returnData := add(_returnData, 0x04)
-        }
-        return abi.decode(_returnData, (string));
+        emit Deposit(msg.sender, PEPEAmount);
     }
-
-    function swapPEPEforETH(uint256 _PEPEToSwap) internal returns (uint256) {
-        uint256 PEPEToSwapAmount = _PEPEToSwap;
-        // to add aggregator for trading
-        return PEPEToSwapAmount;
-    }
+    
 
     function getBalance(address _owner) external view returns (uint256) {
         return shares[_owner];

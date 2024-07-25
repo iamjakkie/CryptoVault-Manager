@@ -60,64 +60,37 @@ describe('Vault', () => {
             // check pepe name
         });
 
-        it('LiFi usage', async () => {
-            const eth = ethers.parseEther('1');
+        it('Wrap ETH', async () => {
 
-            const pepeRatio = await vault.pepeRatio();
+            const pepe_address = await vault.PEPE();
+            const pepe = new ethers.Contract(
+                pepe_address,
+                '["function balanceOf(address) view returns (uint256)"]',
+                ethers.provider
+            )
 
-            console.log(pepeRatio);
+            let pepe_balance = await pepe.balanceOf(investor1.address);
+            console.log(pepe_balance);
 
-            transaction = await vault.connect(investor1).deposit({ value: eth });
+            const amount = ethers.parseEther('10');
+            transaction = await vault.connect(investor1).deposit({ value: amount });
             await transaction.wait();
 
-            console.log(await vault.totalShares());
-
-            console.log(await vault.getBalance(investor1.address));
-
-            // const integrator = 'jumper.exchange';
-            // const referrer = '0x0000000000000000000000000000000000000000'
-            const fromChain = 'ETH';
-            const fromToken = 'ETH';
-            const toChain = 'ETH';
-            const toToken = 'PEPE';
-            const fromAmount = eth.toString();
-            const fromAddress = vault.target;
-
-            const params = {
-                fromChain,
-                toChain,
-                fromToken,
-                toToken,
-                fromAmount,
-                fromAddress,
-            };
-
-            console.log(params);
-
-            const quote = await axios.get('https://li.quest/v1/quote', {
-                params: {
-                    fromChain,
-                    toChain,
-                    fromToken,
-                    toToken,
-                    fromAmount,
-                    fromAddress,
-                }
-            });
-
-            const transactionRequest = quote.data.transactionRequest;
-            
-            const { to, value, data } = transactionRequest;
-            
-            try {
-                transaction = await vault.connect(investor1).swapETHforPEPE(to, value, data);
-                await transaction.wait();
-            } catch (error) {
-                console.log(error);
-            }
+            // Get transaction receipt with logs
+            const txHash = transaction.hash;
+            const txReceipt = ethers.provider.getTransactionReceipt(txHash);
             
 
-            // transaction = await vault.connect(investor1).swapETHforPEPE(transactionRequest.data);
-        });
+            
+
+
+
+            pepe_balance = await pepe.balanceOf(investor1.address);
+            console.log(pepe_balance);
+
+            pepe_balance = await pepe.balanceOf(vault.target);
+            console.log(pepe_balance);
+
+        })
     });
 });
