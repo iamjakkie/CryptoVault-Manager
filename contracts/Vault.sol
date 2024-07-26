@@ -59,7 +59,6 @@ contract Vault is Ownable{
         public
         returns (uint256 amountOut)
     {
-        // IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
         IERC20(tokenIn).approve(address(ROUTER), amountIn);
 
         ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
@@ -81,15 +80,13 @@ contract Vault is Ownable{
         require(ethAmount > 0, "Deposit must be greater than 0 ETH");
         uint256 _shares = ethAmount; // compressor algorithm
         
-        // wrap ETH to WETH
         uint256 WETHAmount = pepeRatio * ethAmount / 100;
         IWETH(WETHAdd).deposit{value: WETHAmount}();
         uint256 PEPEAmount = swapExactInputSingleHop(WETHAdd, PEPEAdd, 3000, WETHAmount, address(this));
 
         totalShares = totalShares+=_shares;
         shares[msg.sender] += _shares;
-
-
+        
         emit Deposit(msg.sender, PEPEAmount);
     }
     
@@ -103,7 +100,6 @@ contract Vault is Ownable{
         require(_shares > 0, "No shares to withdraw");
 
         // calculate ETH to withdraw by transfering back ETH and selling PEPE
-
 
         totalShares = totalShares-=_shares;
         shares[msg.sender] = 0;

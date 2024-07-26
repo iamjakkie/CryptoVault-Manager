@@ -17,7 +17,7 @@ describe('Vault', () => {
 
         beforeEach(async () => {
             const Vault = await ethers.getContractFactory('Vault');
-            vault = await Vault.deploy(60, 40);
+            vault = await Vault.deploy(60, 40, 3600, false);
         });
         it('Successful deployment', async () => {
             expect(vault.address).to.not.equal(0);
@@ -30,7 +30,6 @@ describe('Vault', () => {
         });
         it('PEPE contract can be used', async () => {
             const supply = await vault.PEPESupply();
-            console.log(supply);
             expect(await vault.PEPESupply(), 'PEPE contract has been set').to.not.equal(0);
         });
     });
@@ -40,10 +39,9 @@ describe('Vault', () => {
 
         beforeEach(async () => {
             const Vault = await ethers.getContractFactory('Vault');
-            vault = await Vault.deploy(60, 40);
+            vault = await Vault.deploy(60, 40, 3600, false);
 
             [deployer, investor1, investor2, _] = await ethers.getSigners();
-            console.log(investor1.address);
         });
 
         it('Init', async () => {
@@ -52,7 +50,6 @@ describe('Vault', () => {
 
         it('PEPE contract can be used', async () => {
             const pepe = await vault.PEPE();
-            console.log(pepe);
             expect(pepe).to.not.equal(0);
             // TODO:
             // check pepe supply
@@ -69,26 +66,22 @@ describe('Vault', () => {
                 ethers.provider
             )
 
-            let pepe_balance = await pepe.balanceOf(vault.address);
+            let pepe_balance = await pepe.balanceOf(vault.target);
             expect(pepe_balance).to.equal(0);
 
             const amount = ethers.parseEther('10');
             transaction = await vault.connect(investor1).deposit({ value: amount });
             await transaction.wait();
 
-            // // Get transaction receipt with logs
-            // const txHash = transaction.hash;
-            // const txReceipt = ethers.provider.getTransactionReceipt(txHash);
-            
             pepe_balance = await pepe.balanceOf(vault.target);
             expect(pepe_balance).to.be.greaterThan(0);
 
             const pepe_ratio = await vault.pepeRatio();
 
-            const eth_balance = await ethers.provider.getBalance(vault.address);
-            const expected_eth_balance = ethers.parseEther(amount*(1-pepe_ratio/100)).toString();
-            expect(eth_balance).to.equal(expected_eth_balance);
+            const eth_balance = await ethers.provider.getBalance(vault.target);
+            const expected_eth_balance = ((amount*(100n-pepe_ratio))/100n).toString();
 
+            expect(eth_balance).to.equal(expected_eth_balance);
         })
     });
 });
