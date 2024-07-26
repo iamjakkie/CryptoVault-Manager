@@ -28,7 +28,8 @@ contract Vault is Ownable{
     event Withdraw(address indexed user, uint256 value);
     event RewardsDistributed(uint256 totalRewards);
 
-    constructor(uint256 _ethRatio, uint256 _pepeRatio) Ownable(msg.sender) {
+    // q: how to make it dynamic? I.e. number of tokens
+    constructor(uint256 _ethRatio, uint256 _pepeRatio, uint256 _lockedPeriod, bool _autoWithdrawal) Ownable(msg.sender) {
         PEPE = IERC20(PEPEAdd);
         ethRatio = _ethRatio;
         pepeRatio = _pepeRatio;

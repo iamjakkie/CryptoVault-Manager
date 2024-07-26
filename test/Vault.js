@@ -69,27 +69,25 @@ describe('Vault', () => {
                 ethers.provider
             )
 
-            let pepe_balance = await pepe.balanceOf(investor1.address);
-            console.log(pepe_balance);
+            let pepe_balance = await pepe.balanceOf(vault.address);
+            expect(pepe_balance).to.equal(0);
 
             const amount = ethers.parseEther('10');
             transaction = await vault.connect(investor1).deposit({ value: amount });
             await transaction.wait();
 
-            // Get transaction receipt with logs
-            const txHash = transaction.hash;
-            const txReceipt = ethers.provider.getTransactionReceipt(txHash);
+            // // Get transaction receipt with logs
+            // const txHash = transaction.hash;
+            // const txReceipt = ethers.provider.getTransactionReceipt(txHash);
             
-
-            
-
-
-
-            pepe_balance = await pepe.balanceOf(investor1.address);
-            console.log(pepe_balance);
-
             pepe_balance = await pepe.balanceOf(vault.target);
-            console.log(pepe_balance);
+            expect(pepe_balance).to.be.greaterThan(0);
+
+            const pepe_ratio = await vault.pepeRatio();
+
+            const eth_balance = await ethers.provider.getBalance(vault.address);
+            const expected_eth_balance = ethers.parseEther(amount*(1-pepe_ratio/100)).toString();
+            expect(eth_balance).to.equal(expected_eth_balance);
 
         })
     });
