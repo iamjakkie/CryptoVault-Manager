@@ -2,8 +2,8 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const axios = require('axios');
 /* tests:
-    - Vault contract has been deployed successfully
-    - Ratios have been successfully set
+    - Vault contract has been deployed successfully - ok
+    - Ratios have been successfully set - ok
     - PEPE contract is already deployed (successfully forked mainnet)
     - PEPE contract has been successfully set
 */
@@ -49,12 +49,23 @@ describe('Vault', () => {
         });
 
         it('PEPE contract can be used', async () => {
-            const pepe = await vault.PEPE();
-            expect(pepe).to.not.equal(0);
+            const pepe_address = await vault.PEPE();
+            expect(pepe_address).to.not.equal(0);
             // TODO:
-            // check pepe supply
-            // check pepe symbol
-            // check pepe name
+            const pepe = new ethers.Contract(
+                pepe_address,
+                '["function name() external view returns (string memory)", "function symbol() external view returns (string memory)", "function totalSupply() external view returns (uint256)"]',
+                ethers.provider
+            )
+            
+            const name = await pepe.name();
+            const symbol = await pepe.symbol();
+            const supply = await pepe.totalSupply();
+
+            expect(name).to.equal('Pepe');
+            expect(symbol).to.equal('PEPE');
+            expect(supply).to.be.greaterThan(0);
+
         });
 
         it('Wrap ETH', async () => {
@@ -79,7 +90,7 @@ describe('Vault', () => {
             const pepe_ratio = await vault.pepeRatio();
 
             const eth_balance = await ethers.provider.getBalance(vault.target);
-            const expected_eth_balance = ((amount*(100n-pepe_ratio))/100n).toString();
+            const expected_eth_balance = ((amount * (100n - pepe_ratio)) / 100n).toString();
 
             expect(eth_balance).to.equal(expected_eth_balance);
         })
