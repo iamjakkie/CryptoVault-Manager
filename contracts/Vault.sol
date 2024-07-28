@@ -86,7 +86,7 @@ contract Vault is Ownable{
 
         totalShares = totalShares+=_shares;
         shares[msg.sender] += _shares;
-        
+
         emit Deposit(msg.sender, PEPEAmount);
     }
     
@@ -103,6 +103,9 @@ contract Vault is Ownable{
 
         totalShares = totalShares-=_shares;
         shares[msg.sender] = 0;
+
+        // convert PEPE back to WETH and ETH
+        // uint256 WETHAmount = swapExactInputSingleHop(PEPEAdd, WETHAdd, 3000, amountIn, address(this));
 
         emit Withdraw(msg.sender, _shares);
     }

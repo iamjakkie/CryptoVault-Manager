@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
+// import { time } from "@nomicfoundation/hardhat-network-helpers";
 const axios = require('axios');
 /* tests:
     - Vault contract has been deployed successfully - ok
@@ -34,7 +35,7 @@ describe('Vault', () => {
         });
     });
 
-    describe('Success Swap', () => {
+    describe('Success Deposit', () => {
         let vault, deployer, investor1, investor2, transaction;
 
         beforeEach(async () => {
@@ -68,7 +69,30 @@ describe('Vault', () => {
 
         });
 
-        it('Wrap ETH', async () => {
+        it('Deposit changed ETH value', async () => {
+            let eth = await ethers.provider.getBalance(vault.target);
+            expect(eth).to.equal(0n);
+            const amount = ethers.parseEther('10');
+            transaction = await vault.connect(investor1).deposit({ value: amount });
+            await transaction.wait();
+            const eth_ratio = await vault.ethRatio();
+            eth = await ethers.provider.getBalance(vault.target)
+            expect(eth).to.equal((amount*eth_ratio)/100n);
+        })
+
+        it('Deposit changed shares value', async () => {
+            let totalShares = await vault.totalShares();
+            expect(totalShares).to.equal(0);
+            const amount = ethers.parseEther('10');
+            transaction = await vault.connect(investor1).deposit({ value: amount });
+            await transaction.wait();
+            totalShares = await vault.totalShares();
+            expect(totalShares).to.equal(amount);
+            const userShares = await vault.shares(investor1.address);
+            expect(userShares).to.equal(amount);
+        })
+
+        it('Deposit converted ETH to Pepe', async () => {
 
             const pepe_address = await vault.PEPE();
             const pepe = new ethers.Contract(
@@ -86,13 +110,6 @@ describe('Vault', () => {
 
             pepe_balance = await pepe.balanceOf(vault.target);
             expect(pepe_balance).to.be.greaterThan(0);
-
-            const pepe_ratio = await vault.pepeRatio();
-
-            const eth_balance = await ethers.provider.getBalance(vault.target);
-            const expected_eth_balance = ((amount * (100n - pepe_ratio)) / 100n).toString();
-
-            expect(eth_balance).to.equal(expected_eth_balance);
         })
     });
 });
