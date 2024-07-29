@@ -1,8 +1,19 @@
-const express = require('express');
+import express, { Express, Request, Response } from "express";
 const { Pool } = require('pg');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5001;
+
+async function startCollectingPrices() {
+  setInterval(async () => {
+    console.info("PING!");
+
+    // TODO: Call CoinGecko API and store to DB.
+  }, 5000);
+}
+
+startCollectingPrices();
+
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -16,11 +27,11 @@ const pool = new Pool({
   port: 8812, // QuestDB default port for PostgreSQL
 });
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello from the Express server!');
 });
 
-app.get('/portfolio', async (req, res) => {
+app.get('/portfolio', async (req: Request, res: Response) => {
   try {
     const result = await pool.query('SELECT * FROM portfolio');
     res.json(result.rows);
@@ -30,7 +41,7 @@ app.get('/portfolio', async (req, res) => {
   }
 });
 
-app.get('/vaults/:id', async (req, res) => {
+app.get('/vaults/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const result = await pool.query('SELECT * FROM vaults WHERE id = $1', [id]);
