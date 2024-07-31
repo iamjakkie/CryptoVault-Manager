@@ -8,6 +8,10 @@ dotenv.config();
 const app = express();
 const port = 5001;
 
+const ratios = {
+  "ethereum": 0.6,
+  "pepe": 0.4
+}
 
 
 type price = {
@@ -16,7 +20,14 @@ type price = {
   timestamp: number;
 }
 
-let mem_prices: price[] = [];
+type share_price = {
+  price: number,
+  timestamp: number
+}
+
+let eth_prices: price[] = [];
+let pepe_prices: price[] = [];
+let share_prices: share_price[] = [];
 
 async function get_price(symbol: string) {
   const url = `https://pro-api.coingecko.com/api/v3/coins/${symbol}/market_chart?vs_currency=usd&days=1`;
@@ -34,20 +45,49 @@ async function get_price(symbol: string) {
       timestamp: price[0]
     }
   });
-  // check if symbol exists in mem_prices
-  const index = mem_prices.findIndex((element) => element.symbol === symbol);
-  if (index === -1) {
-    mem_prices = mem_prices.concat(prices);
-  } else {
-    const last_saved_price = mem_prices[mem_prices.length-1];
-    const last_price = prices[prices.length-1];
-    if (last_saved_price.timestamp < last_price.timestamp) {
-      mem_prices.push(last_price);
-    }
+  switch (symbol) {
+    case 'ethereum':
+      if(eth_prices.length === 0) {
+        eth_prices = eth_prices.concat(prices);
+      } else {
+        const last_saved_price = eth_prices[eth_prices.length-1];
+        const last_price = prices[prices.length-1];
+        if (last_saved_price.timestamp < last_price.timestamp) {
+          eth_prices = eth_prices.concat(prices);
+        }
+      }
+      break;
+    case 'pepe':
+      if(eth_prices.length === 0) {
+        eth_prices = eth_prices.concat(prices);
+      } else {
+        const last_saved_price = eth_prices[eth_prices.length-1];
+        const last_price = prices[prices.length-1];
+        if (last_saved_price.timestamp < last_price.timestamp) {
+          eth_prices = eth_prices.concat(prices);
+        }
+      }
+      break;
+    default:
+      console.error("Invalid symbol");
   }
+  // const index = mem_prices.findIndex((element) => element.symbol === symbol);
+  // if (index === -1) {
+  //   mem_prices = mem_prices.concat(prices);
+  // } else {
+  //   // get last price from mem_prices for current symbol
+  //   const last_saved_price = mem_prices.filter((element) => element.symbol === symbol).pop()!;
+  //   const last_price:price = prices[prices.length-1];
+  //   if (last_saved_price.timestamp < last_price.timestamp) {
+  //     mem_prices.push(last_price);
+  //   }
+  // }
 }
 
-
+async function calculateSharePrice(prices: price[]) {
+  // calculate and store share price in list, using ratios
+  const combined_prices = 
+}
 
 
 async function startCollectingPrices() {
@@ -56,9 +96,7 @@ async function startCollectingPrices() {
 
     // TODO: Call CoinGecko API and store to DB.
     await get_price('ethereum');
-    console.log(mem_prices.length);
     await get_price('pepe');
-    console.log(mem_prices.length);
 
   }, 5000);
 }
@@ -92,8 +130,8 @@ app.get('/portfolio', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/vaults/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
+app.get('/vaults/1/share_price', async (req: Request, res: Response) => {
+  // const { id } = req.params;
   try {
     // const result = await pool.query('SELECT * FROM vaults WHERE id = $1', [id]);
     // res.json(result.rows[0]);
