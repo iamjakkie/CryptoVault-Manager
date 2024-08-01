@@ -1,11 +1,13 @@
 // import Pool from 'pg';
 import dotenv from 'dotenv';
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
 // const { Pool } = require('pg');
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 const port = 5001;
 
 const ratios = {
@@ -22,7 +24,7 @@ type price = {
 
 type share_price = {
   price: number,
-  timestamp: number
+  datetime: Date
 }
 
 let eth_prices: price[] = [];
@@ -90,11 +92,11 @@ async function calculateSharePrice() {
   for (let i=0; i<len; i++) {
     const eth_price = eth_prices[i];
     const pepe_price = pepe_prices[i];
-    const timestamp = eth_price.timestamp;
+    const timestamp = new Date(eth_price.timestamp);
     const price = (eth_price.price * ratios["ethereum"]) + (pepe_price.price * ratios["pepe"]);
     const share_price = {
       price: price,
-      timestamp: timestamp
+      datetime: timestamp
     }
     share_prices.push(share_price);
   }
@@ -108,8 +110,7 @@ async function startCollectingPrices() {
     // TODO: Call CoinGecko API and store to DB.
     await get_price('ethereum');
     await get_price('pepe');
-    await calculateSharePrice();
-
+    await calculateSharePrice(); 
   }, 5000);
 }
 
@@ -147,6 +148,8 @@ app.get('/vaults/1/share_price', async (req: Request, res: Response) => {
   try {
     // const result = await pool.query('SELECT * FROM vaults WHERE id = $1', [id]);
     // res.json(result.rows[0]);
+    // notify me when someone is trying to access this endpoint
+    console.log("Someone is trying to access this endpoint");
     res.json(share_prices);
   } catch (error) {
     console.error('Error querying QuestDB:', error);
