@@ -1,21 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import '../styles/Modal.css';
 
 function Modal({ vault, onClose }) {
-  const chartData = {
-    labels: Array.from({ length: 50 }, (_, i) => `${Math.floor(i / 12)}:${(i % 12) * 5}`),
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
         label: 'Vault Performance',
-        data: Array.from({ length: 50 }, () => Math.floor(Math.random() * 100)),
+        data: [],
         fill: false,
         backgroundColor: 'rgba(75,192,192,0.4)',
         borderColor: 'rgba(75,192,192,1)',
         pointRadius: 2,
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/vaults/1/share_price');
+        const data = await response.json();
+
+        // const labels = data.map(item => new Date(item.timestamp * 1000).toLocaleTimeString());
+        // label is in the format YYYY-MM-DDTHH:MM:SS.000Z -> convert it to HH:MM
+        const labels = data.map(item => new Date(item.datetime).toLocaleTimeString());
+        const chartValues = data.map(item => item.price);
+
+        setChartData({
+          labels,
+          datasets: [
+            {
+              ...chartData.datasets[0],
+              data: chartValues,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const chartOptions = {
     plugins: {
