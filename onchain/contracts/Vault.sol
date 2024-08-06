@@ -105,7 +105,11 @@ contract Vault is Ownable{
         shares[msg.sender] = 0;
 
         // convert PEPE back to WETH and ETH
-        // uint256 WETHAmount = swapExactInputSingleHop(PEPEAdd, WETHAdd, 3000, amountIn, address(this));
+        uint256 amountIn = _shares * pepeRatio / 100;
+        uint256 WETHAmount = swapExactInputSingleHop(PEPEAdd, WETHAdd, 3000, amountIn, address(this));
+        IWETH(WETHAdd).withdraw(WETHAmount);
+
+        
 
         emit Withdraw(msg.sender, _shares);
     }
